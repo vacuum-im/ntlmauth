@@ -1,0 +1,12 @@
+Notice
+======
+To build external plugin you should additionally specify two variables
+VACUUM_SRC_PATH - path to the Vacuum sources directory (vacuum/src)
+VACUUM_LIB_PATH - path to the Vacuum builded libraries directory (vacuum/src/libs)
+
+
+Windows example
+===============
+qmake -r VACUUM_SRC_PATH="../vacuum-src/src" VACUUM_LIB_PATH="../vacuum-build/src/libs"
+nmake release
+nmake install

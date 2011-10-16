@@ -1,0 +1,7 @@
+#ifndef DEF_NTLMAUTH_DEFINITIONS_H
+#define DEF_NTLMAUTH_DEFINITIONS_H
+
+//XmppFeaturePluginOrders
+#define XFPO_NTLMAUTH        500
+
+#endif //DEF_NTLMAUTH_DEFINITIONS_H
