@@ -1,8 +1,11 @@
-TRANS_LANGS  = ru
+TRANS_LANGS  = ru pl uk de
 
 FIRST_TARGET = $$member(TARGET,0)
 TRANSLATIONS = \
-	translations/ru/$${FIRST_TARGET}.ts
+	translations/ru/$${FIRST_TARGET}.ts \
+	translations/pl/$${FIRST_TARGET}.ts \
+	translations/uk/$${FIRST_TARGET}.ts \
+	translations/de/$${FIRST_TARGET}.ts
 
 
 #Building Translations
@@ -12,8 +15,8 @@ for(LANG, TRANS_LANGS) {
 	QM_FILE = $${_PRO_FILE_PWD_}/translations/$${LANG}/$${FIRST_TARGET}.qm
 
 	LRELEASE = $$[QT_INSTALL_BINS]/lrelease
-	win32: LRELEASE = $$replace(LRELEASE, "\\\\", "\\\\")
-	win32: LRELEASE = $$replace(LRELEASE, "/", "\\\\")
+	win32: LRELEASE = $$replace(LRELEASE, \\\\, \\\\)
+	win32: LRELEASE = $$replace(LRELEASE, /, \\\\)
 
 	eval(qm_build_$${LANG}.target   = $${QM_FILE})
 	eval(qm_build_$${LANG}.depends  = $${TS_FILE})
@@ -22,7 +25,7 @@ for(LANG, TRANS_LANGS) {
 	qm_build_all.depends += qm_build_$${LANG}
 	QMAKE_EXTRA_TARGETS  += qm_build_$${LANG}
 
-	win32: QM_FILE = $$replace(QM_FILE, "/", "\\\\")
+	win32: QM_FILE = $$replace(QM_FILE, /, \\\\)
 	QMAKE_DISTCLEAN += $${QM_FILE}
 }
 QMAKE_EXTRA_TARGETS  += qm_build_all
@@ -32,10 +35,10 @@ POST_TARGETDEPS += $${qm_build_all.target}
 #Install Translations
 for(LANG, TRANS_LANGS) {
 	INST_DIR  = $${INSTALL_TRANSLATIONS}/$${LANG}
-	win32: INST_DIR = $$replace(INST_DIR, "/", "\\\\")
+	win32: INST_DIR = $$replace(INST_DIR, /, \\\\)
 	
 	INST_FILE = $${_PRO_FILE_PWD_}/translations/$${LANG}/$${FIRST_TARGET}.qm
-	win32: INST_FILE = $$replace(INST_FILE, "/", "\\\\")
+	win32: INST_FILE = $$replace(INST_FILE, /, \\\\)
 	
 	eval(qm_inst_$${LANG}.path  = $${INST_DIR})
 	eval(qm_inst_$${LANG}.files = $${INST_FILE})
