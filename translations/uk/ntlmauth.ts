@@ -30,5 +30,9 @@
         <source>Allows to log in to Jabber server using NTLM authentication</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Allow NTLM authentication on server</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
