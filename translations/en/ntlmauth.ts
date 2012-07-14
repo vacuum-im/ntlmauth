@@ -5,38 +5,38 @@
     <name>NtlmAuth</name>
     <message>
         <source>Failed to process NTLM authorization</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Wrong SASL authentication response</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to start NTLM authorization</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Secure connection is not established</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to process NTLM authorization</translation>
     </message>
     <message>
         <source>NTLM authorization aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>NTLM authorization aborted</translation>
+    </message>
+    <message>
+        <source>Wrong SASL authentication response</source>
+        <translation>Wrong SASL authentication response</translation>
+    </message>
+    <message>
+        <source>Failed to start NTLM authorization</source>
+        <translation>Failed to start NTLM authorization</translation>
+    </message>
+    <message>
+        <source>Secure connection is not established</source>
+        <translation>Secure connection is not established</translation>
     </message>
 </context>
 <context>
     <name>NtlmAuthPlugin</name>
     <message>
         <source>NTLM Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>NTLM Authentication</translation>
     </message>
     <message>
         <source>Allows to log in to Jabber server using NTLM authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Allows to log in to Jabber server using NTLM authentication</translation>
     </message>
     <message>
         <source>Allow NTLM authentication on server</source>
-        <translation type="unfinished"></translation>
+        <translation>Allow NTLM authentication on server</translation>
     </message>
 </context>
 </TS>

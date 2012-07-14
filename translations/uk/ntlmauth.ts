@@ -19,6 +19,10 @@
         <source>Secure connection is not established</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>NTLM authorization aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NtlmAuthPlugin</name>
