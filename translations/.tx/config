@@ -1,0 +1,6 @@
+[main]
+host = http://www.transifex.net
+
+[vacuum-im.ntlmauthts]
+file_filter = <lang>/ntlmauth.ts
+source_lang = ru
