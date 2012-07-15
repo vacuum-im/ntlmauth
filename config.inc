@@ -1,6 +1,6 @@
 #Should be included from SDK
 TARGET_UTILS             = vacuumutils
-unix:!macx:VERSION_UTILS = 1.15.0
+unix:!macx:VERSION_UTILS = 1.17.0
 
 #Configurable values
 isEmpty(INSTALL_PREFIX) {
