@@ -1,23 +1,17 @@
-#Plugin file name
-TARGET              = ntlmauth
-include(config.inc)
+include(qmake/debug.inc)
+include(qmake/config.inc)
 
-#Project Configuration
-TEMPLATE            = lib
-CONFIG             += plugin
+#Project configuration
+TARGET              = ntlmauth
 QT                  = core gui xml network
-LIBS               += -l$${TARGET_UTILS}
-LIBS               += -L$${VACUUM_LIB_PATH}
-DEPENDPATH         += $${VACUUM_SRC_PATH}
-INCLUDEPATH        += $${VACUUM_SRC_PATH}
+include(ntlmauth.pri)
 
 #Plugin specific libs
 LIBS               += -lsecur32
 
-#Install
-include(install.inc)
+#Default progect configuration
+include(qmake/plugin.inc)
 
 #Translation
-include(translations.inc)
-
-include(ntlmauth.pri)
+TRANS_SOURCE_ROOT   = .
+include(translations/languages.inc)

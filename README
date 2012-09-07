@@ -1,0 +1,51 @@
+INFORMATION
+===========
+  NTLM authorization extension plugin for Vacuum-IM
+
+  Authors:
+    Sergey A Potapov - <potapov.s.a@gmail.com>
+
+  Web Site:
+    http://code.google.com/p/vacuum-plugins/
+
+  Source:
+    http://code.google.com/p/vacuum-im
+
+  Jabber conference:
+    vacuum@conference.jabber.ru
+
+  Forum:
+    http://forum.jrudevels.org/viewforum.php?f=11
+
+
+BUILD AND INSTALL
+=================
+  Configure
+  ---------
+  You should use the same settings, as at vacuum build
+  VACUUM_SDK_PATH - full path to vacuum SDK (for defaults look into qmake/config.inc or cmake/config.cmake)
+
+  Unix example
+  ------------
+  qmake VACUUM_SDK_PATH="/usr/include/vacuum" CONFIG-=debug CONFIG-=debug_and_install
+  make
+  sudo make install
+
+  Windows example
+  ---------------
+  qmake VACUUM_SDK_PATH="c:/vacuum/sdk" CONFIG-=debug CONFIG-=debug_and_install
+  nmake
+  nmake install
+
+
+CHANGELOG
+=========
+  LEGEND: [+]-New feature [*]-Enhancement [-]-Bug fix
+
+  v1.1
+  ------
+  [*] Can be deactivated relative each account
+
+  v1.0
+  ------
+  [!] Initial version
