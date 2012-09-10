@@ -1,4 +1,4 @@
-TRANS_LANGS  = en ru pl de uk
+TRANS_LANGS  = ru pl de uk
 TRANS_TARGET = $$member(TARGET,0)
 TRANSLATIONS = \
                $${TRANS_SOURCE_ROOT}/translations/en/$${TRANS_TARGET}.ts \
