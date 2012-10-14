@@ -1,6 +1,6 @@
 #include "ntlmauthplugin.h"
 
-#include <definitions.h>
+#include "definitions.h"
 #include <definitions/namespaces.h>
 #include <definitions/optionnodes.h>
 #include <definitions/optionvalues.h>
