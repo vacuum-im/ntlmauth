@@ -28,7 +28,7 @@ public:
 	virtual bool start(const QDomElement &AElem);
 signals:
 	void finished(bool ARestart);
-	void error(const QString &AError);
+	void error(const XmppError &AError);
 	void featureDestroyed();
 private:
 	IXmppStream *FXmppStream;

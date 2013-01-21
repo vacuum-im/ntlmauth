@@ -2,9 +2,11 @@
 
 #include <QDomElement>
 #include <definitions/namespaces.h>
+#include <definitions/internalerrors.h>
 #include <definitions/xmppstanzahandlerorders.h>
 #include <interfaces/iconnectionmanager.h>
 #include <utils/xmpperror.h>
+#include "definitions.h"
 
 static PSecurityFunctionTable SecFuncTable = InitSecurityInterface();
 
@@ -71,7 +73,7 @@ bool NtlmAuth::xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, int AOrde
 			}
 			else
 			{
-				emit error(tr("Failed to process NTLM authorization"));
+				emit error(XmppError(IERR_NTLMAUTH_FAILED));
 			}
 
 			LocalFree(ob.pvBuffer);
@@ -86,16 +88,15 @@ bool NtlmAuth::xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, int AOrde
 			}
 			else if (AStanza.tagName() == "failure")
 			{
-				XmppStanzaError err(AStanza.element());
-				emit error(err.errorMessage());
+				emit error(XmppStanzaError(AStanza.element()));
 			}
 			else if (AStanza.tagName() == "abort")
 			{
-				emit error(tr("NTLM authorization aborted"));
+				emit error(XmppError(IERR_NTLMAUTH_ABORTED));
 			}
 			else
 			{
-				emit error(tr("Wrong SASL authentication response"));
+				emit error(XmppError(IERR_NTLMAUTH_INVALID_RESPONCE));
 			}
 		}
 		return true;
@@ -144,13 +145,13 @@ bool NtlmAuth::start(const QDomElement &AElem)
 				}
 				else
 				{
-					emit error(tr("Failed to start NTLM authorization"));
+					emit error(XmppError(IERR_NTLMAUTH_NOT_STARTED));
 				}
 			}
 		}
 		else
 		{
-			emit error(tr("Secure connection is not established"));
+			emit error(XmppError(IERR_XMPPSTREAM_NOT_SECURE));
 		}
 	}
 	deleteLater();

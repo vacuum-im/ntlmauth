@@ -1,12 +1,13 @@
 #include "ntlmauthplugin.h"
 
-#include "definitions.h"
 #include <definitions/namespaces.h>
 #include <definitions/optionnodes.h>
 #include <definitions/optionvalues.h>
 #include <definitions/xmppfeatureorders.h>
 #include <definitions/xmppfeaturepluginorders.h>
+#include "definitions.h"
 #include "ntlmauth.h"
+
 
 NtlmAuthPlugin::NtlmAuthPlugin()
 {
@@ -51,6 +52,11 @@ bool NtlmAuthPlugin::initConnections(IPluginManager *APluginManager, int &AInitO
 
 bool NtlmAuthPlugin::initObjects()
 {
+	XmppError::registerError(NS_INTERNAL_ERROR,IERR_NTLMAUTH_FAILED,tr("Failed to process NTLM authorization"));
+	XmppError::registerError(NS_INTERNAL_ERROR,IERR_NTLMAUTH_ABORTED,tr("NTLM authorization aborted"));
+	XmppError::registerError(NS_INTERNAL_ERROR,IERR_NTLMAUTH_INVALID_RESPONCE,tr("Wrong SASL authentication response"));
+	XmppError::registerError(NS_INTERNAL_ERROR,IERR_NTLMAUTH_NOT_STARTED,tr("Failed to start NTLM authorization"));
+
 	if (FXmppStreams)
 	{
 		FXmppStreams->registerXmppFeature(XFO_SASL,NS_FEATURE_SASL);
