@@ -2,29 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ru" sourcelanguage="en">
 <context>
-    <name>NtlmAuth</name>
-    <message>
-        <source>Wrong SASL authentication response</source>
-        <translation>Неверный ответ во время SASL авторизации</translation>
-    </message>
-    <message>
-        <source>Secure connection is not established</source>
-        <translation>Защищенное подключение не установлено</translation>
-    </message>
-    <message>
-        <source>Failed to process NTLM authorization</source>
-        <translation>Не удалось выполнить NTLM авторизацию</translation>
-    </message>
-    <message>
-        <source>Failed to start NTLM authorization</source>
-        <translation>Не удалось запустить NTLM авторизацию</translation>
-    </message>
-    <message>
-        <source>NTLM authorization aborted</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>NtlmAuthPlugin</name>
     <message>
         <source>NTLM Authentication</source>
@@ -37,6 +14,14 @@
     <message>
         <source>Allow NTLM authentication on server</source>
         <translation>Разрешить NTLM авторизацию на сервере</translation>
+    </message>
+    <message>
+        <source>Failed to initialize NTLM authorization</source>
+        <translation>Не удалось инициализировать NTLM авторизацию</translation>
+    </message>
+    <message>
+        <source>Failed to process NTLM authorization</source>
+        <translation>Не удалось выполнить NTLM авторизацию</translation>
     </message>
 </context>
 </TS>

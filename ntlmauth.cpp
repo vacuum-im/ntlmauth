@@ -6,6 +6,7 @@
 #include <definitions/xmppstanzahandlerorders.h>
 #include <interfaces/iconnectionmanager.h>
 #include <utils/xmpperror.h>
+#include <utils/logger.h>
 #include "definitions.h"
 
 static PSecurityFunctionTable SecFuncTable = InitSecurityInterface();
@@ -70,10 +71,12 @@ bool NtlmAuth::xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, int AOrde
 				response.setAttribute("xmlns",NS_FEATURE_SASL);
 				response.element().appendChild(response.createTextNode(respData.toBase64()));
 				FXmppStream->sendStanza(response);
+				LOG_STRM_DEBUG(FXmppStream->streamJid(),QString("Response sent, challenge='%1', response='%2'").arg(QString::fromUtf8(chalData)).arg(QString::fromUtf8(respData)));
 			}
 			else
 			{
-				emit error(XmppError(IERR_NTLMAUTH_FAILED));
+				LOG_STRM_ERROR(FXmppStream->streamJid(),QString("Failed process authorization, challenge='%1', err=%2").arg(QString::fromUtf8(chalData)).arg(rcISC));
+				emit error(XmppError(IERR_NTLMAUTH_INVALID_CHALLENGE));
 			}
 
 			LocalFree(ob.pvBuffer);
@@ -83,20 +86,21 @@ bool NtlmAuth::xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, int AOrde
 			FXmppStream->removeXmppStanzaHandler(XSHO_XMPP_FEATURE,this);
 			if (AStanza.tagName() == "success")
 			{
+				LOG_STRM_INFO(FXmppStream->streamJid(),"Authorization successes");
 				deleteLater();
 				emit finished(true);
 			}
 			else if (AStanza.tagName() == "failure")
 			{
-				emit error(XmppStanzaError(AStanza.element()));
-			}
-			else if (AStanza.tagName() == "abort")
-			{
-				emit error(XmppError(IERR_NTLMAUTH_ABORTED));
+				XmppSaslError err(AStanza.element());
+				LOG_STRM_WARNING(FXmppStream->streamJid(),QString("Authorization failed: %1").arg(err.condition()));
+				emit error(err);
 			}
 			else
 			{
-				emit error(XmppError(IERR_NTLMAUTH_INVALID_RESPONCE));
+				XmppError err(IERR_SASL_AUTH_INVALID_RESPONSE);
+				LOG_STRM_WARNING(FXmppStream->streamJid(),QString("Authorization error: Invalid response=%1").arg(AStanza.tagName()));
+				emit error(err);
 			}
 		}
 		return true;
@@ -106,9 +110,7 @@ bool NtlmAuth::xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, int AOrde
 
 bool NtlmAuth::xmppStanzaOut(IXmppStream *AXmppStream, Stanza &AStanza, int AOrder)
 {
-	Q_UNUSED(AXmppStream);
-	Q_UNUSED(AStanza);
-	Q_UNUSED(AOrder);
+	Q_UNUSED(AXmppStream); Q_UNUSED(AStanza); Q_UNUSED(AOrder);
 	return false;
 }
 
@@ -141,17 +143,21 @@ bool NtlmAuth::start(const QDomElement &AElem)
 					auth.setAttribute("xmlns",NS_FEATURE_SASL).setAttribute("mechanism","NTLM");
 					FXmppStream->insertXmppStanzaHandler(XSHO_XMPP_FEATURE,this);
 					FXmppStream->sendStanza(auth);
+					LOG_STRM_INFO(FXmppStream->streamJid(),"NTLM authorization request sent");
 					return true;
 				}
 				else
 				{
-					emit error(XmppError(IERR_NTLMAUTH_NOT_STARTED));
+					LOG_STRM_ERROR(FXmppStream->streamJid(),QString("Failed to initialize NTLM authorization, err=%1").arg(rc));
+					emit error(XmppError(IERR_NTLMAUTH_NOT_INITIALIZED));
 				}
 			}
 		}
 		else
 		{
-			emit error(XmppError(IERR_XMPPSTREAM_NOT_SECURE));
+			XmppError err(IERR_XMPPSTREAM_NOT_SECURE);
+			LOG_STRM_WARNING(FXmppStream->streamJid(),QString("Failed to send authorization request: %1").arg(err.condition()));
+			emit error(err);
 		}
 	}
 	deleteLater();

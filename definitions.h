@@ -11,9 +11,7 @@
 #define OPV_ACCOUNT_ENABLENTLMAUTH       "accounts.account.enable-ntlm-auth"
 
 //InternalErrors
-#define IERR_NTLMAUTH_FAILED             "ntlmauth-failed"
-#define IERR_NTLMAUTH_ABORTED            "ntlmauth-aborted"
-#define IERR_NTLMAUTH_INVALID_RESPONCE   "ntlmauth-invalid-responce"
-#define IERR_NTLMAUTH_NOT_STARTED        "ntlmauth-not-started"
+#define IERR_NTLMAUTH_NOT_INITIALIZED    "ntlmauth-not-initialized"
+#define IERR_NTLMAUTH_INVALID_CHALLENGE  "ntlmauth-invalid-challenge"
 
 #endif //DEF_NTLMAUTH_DEFINITIONS_H

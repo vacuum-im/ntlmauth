@@ -25,7 +25,7 @@ void NtlmAuthPlugin::pluginInfo(IPluginInfo *APluginInfo)
 {
 	APluginInfo->name = tr("NTLM Authentication");
 	APluginInfo->description = tr("Allows to log in to Jabber server using NTLM authentication");
-	APluginInfo->version = "1.1";
+	APluginInfo->version = "1.1.1";
 	APluginInfo->author = "Potapov S.A. aka Lion";
 	APluginInfo->homePage = "http://code.google.com/p/vacuum-plugins";
 	APluginInfo->dependences.append(XMPPSTREAMS_UUID);
@@ -52,10 +52,8 @@ bool NtlmAuthPlugin::initConnections(IPluginManager *APluginManager, int &AInitO
 
 bool NtlmAuthPlugin::initObjects()
 {
-	XmppError::registerError(NS_INTERNAL_ERROR,IERR_NTLMAUTH_FAILED,tr("Failed to process NTLM authorization"));
-	XmppError::registerError(NS_INTERNAL_ERROR,IERR_NTLMAUTH_ABORTED,tr("NTLM authorization aborted"));
-	XmppError::registerError(NS_INTERNAL_ERROR,IERR_NTLMAUTH_INVALID_RESPONCE,tr("Wrong SASL authentication response"));
-	XmppError::registerError(NS_INTERNAL_ERROR,IERR_NTLMAUTH_NOT_STARTED,tr("Failed to start NTLM authorization"));
+	XmppError::registerError(NS_INTERNAL_ERROR,IERR_NTLMAUTH_NOT_INITIALIZED,tr("Failed to initialize NTLM authorization"));
+	XmppError::registerError(NS_INTERNAL_ERROR,IERR_NTLMAUTH_INVALID_CHALLENGE,tr("Failed to process NTLM authorization"));
 
 	if (FXmppStreams)
 	{

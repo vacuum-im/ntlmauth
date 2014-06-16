@@ -5,8 +5,8 @@
 #include <interfaces/ixmppstreams.h>
 #include <interfaces/ioptionsmanager.h>
 #include <interfaces/iaccountmanager.h>
-#include <utils/options.h>
 #include <utils/xmpperror.h>
+#include <utils/options.h>
 
 #define NTLMAUTH_UUID "{AF2565C7-B689-4776-A40A-187C969CDED3}"
 
