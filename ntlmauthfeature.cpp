@@ -1,4 +1,4 @@
-#include "ntlmauth.h"
+#include "ntlmauthfeature.h"
 
 #include <QDomElement>
 #include <definitions/namespaces.h>
@@ -11,18 +11,18 @@
 
 static PSecurityFunctionTable SecFuncTable = InitSecurityInterface();
 
-NtlmAuth::NtlmAuth(IXmppStream *AXmppStream) : QObject(AXmppStream->instance())
+NtlmAuthFeature::NtlmAuthFeature(IXmppStream *AXmppStream) : QObject(AXmppStream->instance())
 {
 	FXmppStream = AXmppStream;
 }
 
-NtlmAuth::~NtlmAuth()
+NtlmAuthFeature::~NtlmAuthFeature()
 {
 	FXmppStream->removeXmppStanzaHandler(XSHO_XMPP_FEATURE,this);
 	emit featureDestroyed();
 }
 
-bool NtlmAuth::xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, int AOrder)
+bool NtlmAuthFeature::xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, int AOrder)
 {
 	if (AXmppStream==FXmppStream && AOrder==XSHO_XMPP_FEATURE)
 	{
@@ -108,23 +108,23 @@ bool NtlmAuth::xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, int AOrde
 	return false;
 }
 
-bool NtlmAuth::xmppStanzaOut(IXmppStream *AXmppStream, Stanza &AStanza, int AOrder)
+bool NtlmAuthFeature::xmppStanzaOut(IXmppStream *AXmppStream, Stanza &AStanza, int AOrder)
 {
 	Q_UNUSED(AXmppStream); Q_UNUSED(AStanza); Q_UNUSED(AOrder);
 	return false;
 }
 
-QString NtlmAuth::featureNS() const
+QString NtlmAuthFeature::featureNS() const
 {
 	return NS_FEATURE_SASL;
 }
 
-IXmppStream *NtlmAuth::xmppStream() const
+IXmppStream *NtlmAuthFeature::xmppStream() const
 {
 	return FXmppStream;
 }
 
-bool NtlmAuth::start(const QDomElement &AElem)
+bool NtlmAuthFeature::start(const QDomElement &AElem)
 {
 	if (SecFuncTable && AElem.tagName()=="mechanisms")
 	{

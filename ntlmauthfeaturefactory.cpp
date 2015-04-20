@@ -1,27 +1,27 @@
-#include "ntlmauthplugin.h"
+#include "ntlmauthfeaturefactory.h"
 
 #include <definitions/namespaces.h>
 #include <definitions/optionnodes.h>
 #include <definitions/optionvalues.h>
 #include <definitions/xmppfeatureorders.h>
-#include <definitions/xmppfeaturepluginorders.h>
+#include <definitions/xmppfeaturefactoryorders.h>
 #include "definitions.h"
-#include "ntlmauth.h"
+#include "ntlmauthfeature.h"
 
 
-NtlmAuthPlugin::NtlmAuthPlugin()
+NtlmAuthFeatureFactory::NtlmAuthFeatureFactory()
 {
-	FXmppStreams = NULL;
+	FXmppStreammanager = NULL;
 	FOptionsManager = NULL;
 	FAccountManager = NULL;
 }
 
-NtlmAuthPlugin::~NtlmAuthPlugin()
+NtlmAuthFeatureFactory::~NtlmAuthFeatureFactory()
 {
 
 }
 
-void NtlmAuthPlugin::pluginInfo(IPluginInfo *APluginInfo)
+void NtlmAuthFeatureFactory::pluginInfo(IPluginInfo *APluginInfo)
 {
 	APluginInfo->name = tr("NTLM Authentication");
 	APluginInfo->description = tr("Allows to log in to Jabber server using NTLM authentication");
@@ -31,13 +31,13 @@ void NtlmAuthPlugin::pluginInfo(IPluginInfo *APluginInfo)
 	APluginInfo->dependences.append(XMPPSTREAMS_UUID);
 }
 
-bool NtlmAuthPlugin::initConnections(IPluginManager *APluginManager, int &AInitOrder)
+bool NtlmAuthFeatureFactory::initConnections(IPluginManager *APluginManager, int &AInitOrder)
 {
 	Q_UNUSED(AInitOrder);
 
-	IPlugin *plugin = APluginManager->pluginInterface("IXmppStreams").value(0,NULL);
+	IPlugin *plugin = APluginManager->pluginInterface("IXmppStreamManager").value(0,NULL);
 	if (plugin)
-		FXmppStreams = qobject_cast<IXmppStreams *>(plugin->instance());
+		FXmppStreammanager = qobject_cast<IXmppStreamManager *>(plugin->instance());
 
 	plugin = APluginManager->pluginInterface("IOptionsManager").value(0,NULL);
 	if (plugin)
@@ -47,60 +47,60 @@ bool NtlmAuthPlugin::initConnections(IPluginManager *APluginManager, int &AInitO
 	if (plugin)
 		FAccountManager = qobject_cast<IAccountManager *>(plugin->instance());
 
-	return FXmppStreams!=NULL;
+	return FXmppStreammanager!=NULL;
 }
 
-bool NtlmAuthPlugin::initObjects()
+bool NtlmAuthFeatureFactory::initObjects()
 {
 	XmppError::registerError(NS_INTERNAL_ERROR,IERR_NTLMAUTH_NOT_INITIALIZED,tr("Failed to initialize NTLM authorization"));
 	XmppError::registerError(NS_INTERNAL_ERROR,IERR_NTLMAUTH_INVALID_CHALLENGE,tr("Failed to process NTLM authorization"));
 
-	if (FXmppStreams)
+	if (FXmppStreammanager)
 	{
-		FXmppStreams->registerXmppFeature(XFO_SASL,NS_FEATURE_SASL);
-		FXmppStreams->registerXmppFeaturePlugin(XFPO_NTLMAUTH,NS_FEATURE_SASL,this);
+		FXmppStreammanager->registerXmppFeature(XFO_SASL,NS_FEATURE_SASL);
+		FXmppStreammanager->registerXmppFeatureFactory(XFFO_NTLMAUTH,NS_FEATURE_SASL,this);
 	}
 	if (FOptionsManager)
 	{
-		FOptionsManager->insertOptionsHolder(this);
+		FOptionsManager->insertOptionsDialogHolder(this);
 	}
 	return true;
 }
 
-bool NtlmAuthPlugin::initSettings()
+bool NtlmAuthFeatureFactory::initSettings()
 {
 	Options::setDefaultValue(OPV_ACCOUNT_ENABLENTLMAUTH,true);
 	return true;
 }
 
-QMultiMap<int, IOptionsWidget *> NtlmAuthPlugin::optionsWidgets(const QString &ANodeId, QWidget *AParent)
+QMultiMap<int, IOptionsDialogWidget *> NtlmAuthFeatureFactory::optionsDialogWidgets(const QString &ANodeId, QWidget *AParent)
 {
-	QMultiMap<int, IOptionsWidget *> widgets;
+	QMultiMap<int, IOptionsDialogWidget *> widgets;
 	if (FOptionsManager)
 	{
 		QStringList nodeTree = ANodeId.split(".",QString::SkipEmptyParts);
-		if (nodeTree.count()==2 && nodeTree.at(0)==OPN_ACCOUNTS)
+		if (nodeTree.count()==3 && nodeTree.at(0)==OPN_ACCOUNTS && nodeTree.at(2)=="Parameters")
 		{
-			OptionsNode aoptions = Options::node(OPV_ACCOUNT_ITEM,nodeTree.at(1));
-			widgets.insertMulti(OWO_ACCOUNT_NTLMAUTH, FOptionsManager->optionsNodeWidget(aoptions.node("enable-ntlm-auth"),tr("Allow NTLM authentication on server"),AParent));
+			OptionsNode options = Options::node(OPV_ACCOUNT_ITEM,nodeTree.at(1));
+			widgets.insertMulti(OWO_ACCOUNTS_PARAMS_NTLMAUTH,FOptionsManager->newOptionsDialogWidget(options.node("enable-ntlm-auth"),tr("Use system user parameters for authorization"),AParent));
 		}
 	}
 	return widgets;
 }
 
-QList<QString> NtlmAuthPlugin::xmppFeatures() const
+QList<QString> NtlmAuthFeatureFactory::xmppFeatures() const
 {
 	return QList<QString>() << NS_FEATURE_SASL;
 }
 
-IXmppFeature *NtlmAuthPlugin::newXmppFeature(const QString &AFeatureNS, IXmppStream *AXmppStream)
+IXmppFeature *NtlmAuthFeatureFactory::newXmppFeature(const QString &AFeatureNS, IXmppStream *AXmppStream)
 {
 	if (AFeatureNS == NS_FEATURE_SASL)
 	{
-		IAccount *account = FAccountManager!=NULL ? FAccountManager->accountByStream(AXmppStream->streamJid()) : NULL;
+		IAccount *account = FAccountManager!=NULL ? FAccountManager->findAccountByStream(AXmppStream->streamJid()) : NULL;
 		if (account==NULL || account->optionsNode().value("enable-ntlm-auth").toBool())
 		{
-			IXmppFeature *feature = new NtlmAuth(AXmppStream);
+			IXmppFeature *feature = new NtlmAuthFeature(AXmppStream);
 			connect(feature->instance(),SIGNAL(featureDestroyed()),SLOT(onFeatureDestroyed()));
 			emit featureCreated(feature);
 			return feature;
@@ -109,11 +109,11 @@ IXmppFeature *NtlmAuthPlugin::newXmppFeature(const QString &AFeatureNS, IXmppStr
 	return NULL;
 }
 
-void NtlmAuthPlugin::onFeatureDestroyed()
+void NtlmAuthFeatureFactory::onFeatureDestroyed()
 {
 	IXmppFeature *feature = qobject_cast<IXmppFeature *>(sender());
 	if (feature)
 		emit featureDestroyed(feature);
 }
 
-Q_EXPORT_PLUGIN2(plg_ntlmauth, NtlmAuthPlugin)
+Q_EXPORT_PLUGIN2(plg_ntlmauth, NtlmAuthFeatureFactory)

@@ -1,5 +1,5 @@
-HEADERS = ntlmauthplugin.h \
-          ntlmauth.h
+HEADERS = ntlmauthfeaturefactory.h \
+          ntlmauthfeature.h
 
-SOURCES = ntlmauthplugin.cpp \
-          ntlmauth.cpp
+SOURCES = ntlmauthfeaturefactory.cpp \
+          ntlmauthfeature.cpp

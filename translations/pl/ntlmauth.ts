@@ -2,7 +2,7 @@
 <!DOCTYPE TS>
 <TS version="2.0" sourcelanguage="en">
 <context>
-    <name>NtlmAuthPlugin</name>
+    <name>NtlmAuthFeatureFactory</name>
     <message>
         <source>NTLM Authentication</source>
         <translation type="unfinished"></translation>
@@ -12,15 +12,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Allow NTLM authentication on server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Failed to initialize NTLM authorization</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Failed to process NTLM authorization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use system user parameters for authorization</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

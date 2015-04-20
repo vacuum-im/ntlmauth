@@ -2,7 +2,7 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ru" sourcelanguage="en">
 <context>
-    <name>NtlmAuthPlugin</name>
+    <name>NtlmAuthFeatureFactory</name>
     <message>
         <source>NTLM Authentication</source>
         <translation>NTLM авторизация</translation>
@@ -12,16 +12,16 @@
         <translation>Позволяет авторизоваться на Jabber сервере используя NTLM</translation>
     </message>
     <message>
-        <source>Allow NTLM authentication on server</source>
-        <translation>Разрешить NTLM авторизацию на сервере</translation>
-    </message>
-    <message>
         <source>Failed to initialize NTLM authorization</source>
         <translation>Не удалось инициализировать NTLM авторизацию</translation>
     </message>
     <message>
         <source>Failed to process NTLM authorization</source>
         <translation>Не удалось выполнить NTLM авторизацию</translation>
+    </message>
+    <message>
+        <source>Use system user parameters for authorization</source>
+        <translation>Использовать параметры системного  пользователя для авторизации</translation>
     </message>
 </context>
 </TS>

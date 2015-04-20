@@ -2,7 +2,7 @@
 #define NTLMAUTHPLUGIN_H
 
 #include <interfaces/ipluginmanager.h>
-#include <interfaces/ixmppstreams.h>
+#include <interfaces/ixmppstreammanager.h>
 #include <interfaces/ioptionsmanager.h>
 #include <interfaces/iaccountmanager.h>
 #include <utils/xmpperror.h>
@@ -10,17 +10,17 @@
 
 #define NTLMAUTH_UUID "{AF2565C7-B689-4776-A40A-187C969CDED3}"
 
-class NtlmAuthPlugin : 
+class NtlmAuthFeatureFactory : 
 	public QObject,
 	public IPlugin,
-	public IOptionsHolder,
-	public IXmppFeaturesPlugin
+	public IOptionsDialogHolder,
+	public IXmppFeatureFactory
 {
 	Q_OBJECT;
-	Q_INTERFACES(IPlugin IOptionsHolder IXmppFeaturesPlugin);
+	Q_INTERFACES(IPlugin IOptionsDialogHolder IXmppFeatureFactory);
 public:
-	NtlmAuthPlugin();
-	~NtlmAuthPlugin();
+	NtlmAuthFeatureFactory();
+	~NtlmAuthFeatureFactory();
 	//IPlugin
 	virtual QObject *instance() { return this; }
 	virtual QUuid pluginUuid() const { return NTLMAUTH_UUID; }
@@ -30,7 +30,7 @@ public:
 	virtual bool initSettings();
 	virtual bool startPlugin() { return true; }
 	//IOptionsHolder
-	virtual QMultiMap<int, IOptionsWidget *> optionsWidgets(const QString &ANodeId, QWidget *AParent);
+	virtual QMultiMap<int, IOptionsDialogWidget *> optionsDialogWidgets(const QString &ANodeId, QWidget *AParent);
 	//IXmppFeaturesPlugin
 	virtual QList<QString> xmppFeatures() const;
 	virtual IXmppFeature *newXmppFeature(const QString &AFeatureNS, IXmppStream *AXmppStream);
@@ -40,9 +40,9 @@ signals:
 protected slots:
 	void onFeatureDestroyed();
 private:
-	IXmppStreams *FXmppStreams;
 	IOptionsManager *FOptionsManager;
 	IAccountManager *FAccountManager;
+	IXmppStreamManager *FXmppStreammanager;
 };
 
 #endif // NTLMAUTHPLUGIN_H

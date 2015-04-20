@@ -6,9 +6,9 @@
 #define SECURITY_WIN32
 #include <security.h>
 
-#include <interfaces/ixmppstreams.h>
+#include <interfaces/ixmppstreammanager.h>
 
-class NtlmAuth : 
+class NtlmAuthFeature : 
 	public QObject,
 	public IXmppFeature,
 	public IXmppStanzaHadler
@@ -16,8 +16,8 @@ class NtlmAuth :
 	Q_OBJECT;
 	Q_INTERFACES(IXmppFeature IXmppStanzaHadler);
 public:
-	NtlmAuth(IXmppStream *AXmppStream);
-	~NtlmAuth();
+	NtlmAuthFeature(IXmppStream *AXmppStream);
+	~NtlmAuthFeature();
 	virtual QObject *instance() { return this; }
 	//IXmppStanzaHadler
 	virtual bool xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, int AOrder);
