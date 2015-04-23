@@ -1,2 +1,1 @@
-autotranslate.exe en
-tsupdate.bat
+autotranslate.exe en ru
