@@ -1,0 +1,8 @@
+[submodule "cmake"]
+	path = cmake
+	url = git://github.com/Vacuum-IM/buildsys-cmake.git
+	branch = master
+[submodule "qmake"]
+	path = qmake
+	url = git://github.com/Vacuum-IM/buildsys-qmake.git
+	branch = master
