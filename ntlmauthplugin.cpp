@@ -78,7 +78,9 @@ QMultiMap<int, IOptionsWidget *> NtlmAuthPlugin::optionsWidgets(const QString &A
 		if (nodeTree.count()==2 && nodeTree.at(0)==OPN_ACCOUNTS)
 		{
 			OptionsNode aoptions = Options::node(OPV_ACCOUNT_ITEM,nodeTree.at(1));
-			widgets.insertMulti(OWO_ACCOUNT_NTLMAUTH, FOptionsManager->optionsNodeWidget(aoptions.node("enable-ntlm-auth"),tr("Allow NTLM authentication on server"),AParent));
+			IOptionsWidget *widget = FOptionsManager->optionsNodeWidget(aoptions.node("enable-ntlm-auth"),tr("Allow NTLM authentication on server"),AParent);
+			widget->instance()->setEnabled(NtlmAuth::isSupported());
+			widgets.insertMulti(OWO_ACCOUNT_NTLMAUTH, widget);
 		}
 	}
 	return widgets;
@@ -96,10 +98,13 @@ IXmppFeature *NtlmAuthPlugin::newXmppFeature(const QString &AFeatureNS, IXmppStr
 		IAccount *account = FAccountManager!=NULL ? FAccountManager->accountByStream(AXmppStream->streamJid()) : NULL;
 		if (account==NULL || account->optionsNode().value("enable-ntlm-auth").toBool())
 		{
-			IXmppFeature *feature = new NtlmAuth(AXmppStream);
-			connect(feature->instance(),SIGNAL(featureDestroyed()),SLOT(onFeatureDestroyed()));
-			emit featureCreated(feature);
-			return feature;
+			if (NtlmAuth::isSupported())
+			{
+				IXmppFeature *feature = new NtlmAuth(AXmppStream);
+				connect(feature->instance(),SIGNAL(featureDestroyed()),SLOT(onFeatureDestroyed()));
+				emit featureCreated(feature);
+				return feature;
+			}
 		}
 	}
 	return NULL;

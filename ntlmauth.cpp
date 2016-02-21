@@ -127,8 +127,7 @@ bool NtlmAuth::start(const QDomElement &AElem)
 	{
 		if (!xmppStream()->isEncryptionRequired() || xmppStream()->connection()->isEncrypted())
 		{
-			QDomElement mechElem = AElem.firstChildElement("mechanism");
-			if (mechElem.text() == "NTLM")
+			if (hasNtlmMechanism(AElem))
 			{
 				int rc = 0;
 				rc += SecFuncTable->QuerySecurityPackageInfo(NTLMSP_NAME,&FSecPackInfo);
@@ -155,4 +154,21 @@ bool NtlmAuth::start(const QDomElement &AElem)
 	}
 	deleteLater();
 	return false;
+}
+
+bool NtlmAuth::isSupported()
+{
+	return SecFuncTable!=NULL;
+}
+
+bool NtlmAuth::hasNtlmMechanism(const QDomElement &AMechanisms)
+{
+		QDomElement mechElem = AMechanisms.firstChildElement("mechanism");
+		while(!mechElem.isNull())
+		{
+				if (mechElem.text() == "NTLM")
+					return true;
+				mechElem = mechElem.nextSiblingElement("mechanism");
+		}
+		return false;
 }
