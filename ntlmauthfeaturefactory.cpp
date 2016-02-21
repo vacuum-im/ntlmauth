@@ -5,9 +5,9 @@
 #include <definitions/optionvalues.h>
 #include <definitions/xmppfeatureorders.h>
 #include <definitions/xmppfeaturefactoryorders.h>
+#include <utils/logger.h>
 #include "definitions.h"
 #include "ntlmauthfeature.h"
-
 
 NtlmAuthFeatureFactory::NtlmAuthFeatureFactory()
 {
@@ -25,9 +25,9 @@ void NtlmAuthFeatureFactory::pluginInfo(IPluginInfo *APluginInfo)
 {
 	APluginInfo->name = tr("NTLM Authentication");
 	APluginInfo->description = tr("Allows to log in to Jabber server using NTLM authentication");
-	APluginInfo->version = "1.1.1";
+	APluginInfo->version = "1.2.0";
 	APluginInfo->author = "Potapov S.A. aka Lion";
-	APluginInfo->homePage = "http://code.google.com/p/vacuum-plugins";
+	APluginInfo->homePage = "https://github.com/Vacuum-IM/ntlmauth";
 	APluginInfo->dependences.append(XMPPSTREAMS_UUID);
 }
 
@@ -82,7 +82,9 @@ QMultiMap<int, IOptionsDialogWidget *> NtlmAuthFeatureFactory::optionsDialogWidg
 		if (nodeTree.count()==3 && nodeTree.at(0)==OPN_ACCOUNTS && nodeTree.at(2)=="Parameters")
 		{
 			OptionsNode options = Options::node(OPV_ACCOUNT_ITEM,nodeTree.at(1));
-			widgets.insertMulti(OWO_ACCOUNTS_PARAMS_NTLMAUTH,FOptionsManager->newOptionsDialogWidget(options.node("enable-ntlm-auth"),tr("Use system user parameters for authorization"),AParent));
+			IOptionsDialogWidget *widget = FOptionsManager->newOptionsDialogWidget(options.node("enable-ntlm-auth"),tr("Use system user parameters for authorization"),AParent);
+			widget->instance()->setEnabled(NtlmAuthFeature::isSupported());
+			widgets.insertMulti(OWO_ACCOUNTS_PARAMS_NTLMAUTH,widget);
 		}
 	}
 	return widgets;
@@ -100,10 +102,14 @@ IXmppFeature *NtlmAuthFeatureFactory::newXmppFeature(const QString &AFeatureNS, 
 		IAccount *account = FAccountManager!=NULL ? FAccountManager->findAccountByStream(AXmppStream->streamJid()) : NULL;
 		if (account==NULL || account->optionsNode().value("enable-ntlm-auth").toBool())
 		{
-			IXmppFeature *feature = new NtlmAuthFeature(AXmppStream);
-			connect(feature->instance(),SIGNAL(featureDestroyed()),SLOT(onFeatureDestroyed()));
-			emit featureCreated(feature);
-			return feature;
+			if (NtlmAuthFeature::isSupported())
+			{
+				LOG_STRM_INFO(AXmppStream->streamJid(),"NTLMAuth XMPP stream feature created");
+				IXmppFeature *feature = new NtlmAuthFeature(AXmppStream);				connect(feature->instance(),SIGNAL(featureDestroyed()),SLOT(onFeatureDestroyed()));				emit featureCreated(feature);				return feature;			}
+			else
+			{
+				LOG_STRM_WARNING(AXmppStream->streamJid(),"Failed to create NTLMAuth XMPP stream feature: Not supported");
+			}
 		}
 	}
 	return NULL;
@@ -113,7 +119,10 @@ void NtlmAuthFeatureFactory::onFeatureDestroyed()
 {
 	IXmppFeature *feature = qobject_cast<IXmppFeature *>(sender());
 	if (feature)
+	{
+		LOG_STRM_INFO(feature->xmppStream()->streamJid(),"NTLMAuth XMPP stream feature destroyed");
 		emit featureDestroyed(feature);
+	}
 }
 
 Q_EXPORT_PLUGIN2(plg_ntlmauth, NtlmAuthFeatureFactory)

@@ -26,10 +26,14 @@ public:
 	virtual QString featureNS() const;
 	virtual IXmppStream *xmppStream() const;
 	virtual bool start(const QDomElement &AElem);
+	//NtlmAuthFeature
+	static bool isSupported();
 signals:
 	void finished(bool ARestart);
 	void error(const XmppError &AError);
 	void featureDestroyed();
+protected:
+	static bool hasNtlmMechanism(const QDomElement &AMechanisms);
 private:
 	IXmppStream *FXmppStream;
 private:
