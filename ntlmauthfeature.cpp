@@ -26,7 +26,7 @@ bool NtlmAuthFeature::xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, in
 {
 	if (AXmppStream==FXmppStream && AOrder==XSHO_XMPP_FEATURE)
 	{
-		if (AStanza.tagName() == "challenge")
+		if (AStanza.kind() == "challenge")
 		{
 			SecBuffer ob, ib;
 			SecBufferDesc obd, ibd;
@@ -84,13 +84,13 @@ bool NtlmAuthFeature::xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, in
 		else
 		{
 			FXmppStream->removeXmppStanzaHandler(XSHO_XMPP_FEATURE,this);
-			if (AStanza.tagName() == "success")
+			if (AStanza.kind() == "success")
 			{
 				LOG_STRM_INFO(FXmppStream->streamJid(),"Authorization successes");
 				deleteLater();
 				emit finished(true);
 			}
-			else if (AStanza.tagName() == "failure")
+			else if (AStanza.kind() == "failure")
 			{
 				XmppSaslError err(AStanza.element());
 				LOG_STRM_WARNING(FXmppStream->streamJid(),QString("Authorization failed: %1").arg(err.condition()));
@@ -99,7 +99,7 @@ bool NtlmAuthFeature::xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, in
 			else
 			{
 				XmppError err(IERR_SASL_AUTH_INVALID_RESPONSE);
-				LOG_STRM_WARNING(FXmppStream->streamJid(),QString("Authorization error: Invalid response=%1").arg(AStanza.tagName()));
+				LOG_STRM_WARNING(FXmppStream->streamJid(),QString("Authorization error: Invalid response=%1").arg(AStanza.kind()));
 				emit error(err);
 			}
 		}
