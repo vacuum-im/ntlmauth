@@ -67,8 +67,7 @@ bool NtlmAuthFeature::xmppStanzaIn(IXmppStream *AXmppStream, Stanza &AStanza, in
 			{
 				QByteArray respData((const char *)ob.pvBuffer,ob.cbBuffer);
 
-				Stanza response("response");
-				response.setAttribute("xmlns",NS_FEATURE_SASL);
+				Stanza response("response", NS_FEATURE_SASL);
 				response.element().appendChild(response.createTextNode(respData.toBase64()));
 				FXmppStream->sendStanza(response);
 				LOG_STRM_DEBUG(FXmppStream->streamJid(),QString("Response sent, challenge='%1', response='%2'").arg(QString::fromUtf8(chalData)).arg(QString::fromUtf8(respData)));
@@ -138,8 +137,8 @@ bool NtlmAuthFeature::start(const QDomElement &AElem)
 				
 				if (rc == SEC_E_OK)
 				{
-					Stanza auth("auth");
-					auth.setAttribute("xmlns",NS_FEATURE_SASL).setAttribute("mechanism","NTLM");
+					Stanza auth("auth", NS_FEATURE_SASL);
+					auth.setAttribute("mechanism","NTLM");
 					FXmppStream->insertXmppStanzaHandler(XSHO_XMPP_FEATURE,this);
 					FXmppStream->sendStanza(auth);
 					LOG_STRM_INFO(FXmppStream->streamJid(),"NTLM authorization request sent");
