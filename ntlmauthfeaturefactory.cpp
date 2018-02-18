@@ -105,7 +105,11 @@ IXmppFeature *NtlmAuthFeatureFactory::newXmppFeature(const QString &AFeatureNS, 
 			if (NtlmAuthFeature::isSupported())
 			{
 				LOG_STRM_INFO(AXmppStream->streamJid(),"NTLMAuth XMPP stream feature created");
-				IXmppFeature *feature = new NtlmAuthFeature(AXmppStream);				connect(feature->instance(),SIGNAL(featureDestroyed()),SLOT(onFeatureDestroyed()));				emit featureCreated(feature);				return feature;			}
+				IXmppFeature *feature = new NtlmAuthFeature(AXmppStream);
+				connect(feature->instance(),SIGNAL(featureDestroyed()),SLOT(onFeatureDestroyed()));
+				emit featureCreated(feature);
+				return feature;
+			}
 			else
 			{
 				LOG_STRM_WARNING(AXmppStream->streamJid(),"Failed to create NTLMAuth XMPP stream feature: Not supported");
@@ -124,5 +128,3 @@ void NtlmAuthFeatureFactory::onFeatureDestroyed()
 		emit featureDestroyed(feature);
 	}
 }
-
-Q_EXPORT_PLUGIN2(plg_ntlmauth, NtlmAuthFeatureFactory)

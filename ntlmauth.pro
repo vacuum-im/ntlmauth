@@ -3,7 +3,7 @@ include(qmake/config.inc)
 
 #Project configuration
 TARGET              = ntlmauth
-QT                  = core gui xml network
+QT                  = core gui xml network widgets
 include(ntlmauth.pri)
 
 #Plugin specific libs

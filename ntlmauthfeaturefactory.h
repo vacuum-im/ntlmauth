@@ -18,6 +18,7 @@ class NtlmAuthFeatureFactory :
 {
 	Q_OBJECT;
 	Q_INTERFACES(IPlugin IOptionsDialogHolder IXmppFeatureFactory);
+	Q_PLUGIN_METADATA(IID "org.vacuum-im.plugins.NtlmAuth");
 public:
 	NtlmAuthFeatureFactory();
 	~NtlmAuthFeatureFactory();
