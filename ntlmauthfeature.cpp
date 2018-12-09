@@ -132,8 +132,10 @@ bool NtlmAuthFeature::start(const QDomElement &AElem)
 			if (hasNtlmMechanism(AElem))
 			{
 				int rc = 0;
-				rc += SecFuncTable->QuerySecurityPackageInfo(NTLMSP_NAME,&FSecPackInfo);
-				rc += SecFuncTable->AcquireCredentialsHandle(NULL,NTLMSP_NAME,SECPKG_CRED_OUTBOUND,NULL, NULL, NULL, NULL, &FCredHandle, NULL);
+				wchar_t ntlmsp_name[] = NTLMSP_NAME;
+
+				rc += SecFuncTable->QuerySecurityPackageInfo(ntlmsp_name,&FSecPackInfo);
+				rc += SecFuncTable->AcquireCredentialsHandle(NULL,ntlmsp_name,SECPKG_CRED_OUTBOUND,NULL, NULL, NULL, NULL, &FCredHandle, NULL);
 				
 				if (rc == SEC_E_OK)
 				{
