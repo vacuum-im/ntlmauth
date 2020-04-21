@@ -24,7 +24,7 @@ NtlmAuthFeatureFactory::~NtlmAuthFeatureFactory()
 void NtlmAuthFeatureFactory::pluginInfo(IPluginInfo *APluginInfo)
 {
 	APluginInfo->name = tr("NTLM Authentication");
-	APluginInfo->description = tr("Allows to log in to Jabber server using NTLM authentication");
+	APluginInfo->description = tr("Allows to log in to XMPP server using NTLM authentication");
 	APluginInfo->version = "1.2.2";
 	APluginInfo->author = "Potapov S.A. aka Lion";
 	APluginInfo->homePage = "https://github.com/Vacuum-IM/ntlmauth";
