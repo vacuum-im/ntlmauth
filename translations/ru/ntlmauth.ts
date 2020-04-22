@@ -8,8 +8,8 @@
         <translation>NTLM авторизация</translation>
     </message>
     <message>
-        <source>Allows to log in to Jabber server using NTLM authentication</source>
-        <translation>Позволяет авторизоваться на Jabber сервере используя NTLM</translation>
+        <source>Allows to log in to XMPP server using NTLM authentication</source>
+        <translation>Позволяет авторизоваться на XMPP сервере используя NTLM</translation>
     </message>
     <message>
         <source>Failed to initialize NTLM authorization</source>

@@ -6,7 +6,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Allows to log in to Jabber server using NTLM authentication</source>
+        <source>Allows to log in to XMPP server using NTLM authentication</source>
         <translation type="unfinished"/>
     </message>
     <message>
